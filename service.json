@@ -1,0 +1,8 @@
+{
+	"port": 8012,
+	"name": "DNS Updater",
+	"commands": {
+		"main": './server.pl'
+	},
+	"subdomain": "dns"
+}
