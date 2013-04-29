@@ -27,4 +27,4 @@ Requests shouldn't be routed through any proxy servers as this will result in th
 The only exception to this is where the proxy server: a) is running on the same machine as this script, and b) adds an X-Forwarded-For header to the request
 
 ## Security
-Security here is minimal.  Using it outside of networks you control is inadvisable, as the current setup is vunerable to reply attacks.  Consider running any requests on external networks over https to avoid evesdropping.
+Security here is minimal.  Using it outside of networks you control is inadvisable, as the current setup is vunerable to replay attacks.  Consider running any requests on external networks over https to avoid evesdropping.
