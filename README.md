@@ -11,12 +11,10 @@ The script depends on a config file being added to the root of the project calle
 The following settings are needed:
 * **apikey**: A key used by machines to show that they're trusted.
 * **serverfilename**: The path of the bind config file to edit (the user running the program needs permission to read and write to/from this file)
-* **domainname**: The domain which the program should assign machines to be subdomains of
-* **nameserver**: The domain name of the bind server
 * **emailaddr**: Email address of person responsible for the zone. Format is mailbox-name.domain.com (like in a standard bind config)
 
 ## Running
-The web server is designed to be run within lucos_services, but can be run standalone by running ./server.pl  It currently runs on port 8012.
+The web server is designed to be run within lucos_services, but can be run standalone by running ./server.pl port servicedomain where port is the TCP port number the server should listen to and servicedomain is the domain of a running lucos_services instance.
 
 ## Using
 Each machine wishing to register itself with the service should send a HTTP PUT request to "/servers/<machinename>", where <machinename> is the name of the machine sending the message.  Each machine using the system should have a unique machinename.  The resulting domain for the machine will be machinename.domainname (where domainname is the one specified in the config file).
