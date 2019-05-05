@@ -9,6 +9,8 @@ services:
         - "953:953"
       volumes:
         - "dynamicdnsconfig:/etc/bind/dynamic"
+      image: lucas42/lucos_dns_bind
+
     updater:
       build: ./updater
       container_name: dnsupdater
@@ -19,6 +21,7 @@ services:
         - APIKEY
       volumes:
         - "dynamicdnsconfig:/etc/bind/dynamic"
+      image: lucas42/lucos_dns_updater
 
 volumes:
   dynamicdnsconfig:
