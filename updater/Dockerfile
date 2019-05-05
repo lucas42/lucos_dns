@@ -1,0 +1,14 @@
+FROM alpine:latest
+
+RUN apk --update add bind # Needed for rndc package (bind server itself has it own container)
+RUN apk --update add perl perl-config-simple perl-http-message perl-libwww perl-json
+
+WORKDIR /usr/src/app
+COPY . .
+
+RUN echo "serverfilename    /etc/bind/dynamic/s.l42.eu" >> config
+RUN echo "servicefilename   /etc/bind/dynamic/b.l42.eu" >> config
+
+EXPOSE 8080
+
+CMD ["perl", "server.pl", "8080", "services.l42.eu"]

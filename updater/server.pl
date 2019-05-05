@@ -10,10 +10,13 @@ my $port = $ARGV[0];
 my $servicesdomain = $ARGV[1];
 
 Config::Simple->import_from('config', \%Config);
-my $apikey = $Config{apikey};
 my $serverfilename = $Config{serverfilename};
 my $servicefilename = $Config{servicefilename};
-my $emailaddr = $Config{emailaddr};
+
+my $apikey = $ENV{'APIKEY'};
+my $emailaddr = $ENV{'ADMINEMAIL'};
+if (!$apikey) { die "Missing environment variable APIKEY\n"; }
+if (!$emailaddr) { die "Missing environment variable ADMINEMAIL\n"; }
 
 # Get a list of all the services running in lucos
 my $hostsurl = "http://$servicesdomain/api/hosts";
@@ -28,7 +31,8 @@ $domainname = "s.$rootdomain";
 $currenthostname = `hostname -s`;
 chomp($currenthostname);
 %aliases = ();
-while (my($host, $address) = each $service_domains) {
+while (my($host, $address) = each %service_domains) {
+
 	if ($address eq $rootdomain) {
 		$rel = "@";
 	} elsif ($address =~ /\.${rootdomain}$/) {
@@ -119,7 +123,7 @@ while($client = $server->accept()) {
 
 sub parseServers {
 	my %addresses = ();
-	$file = open FILE, $serverfilename or die "Could not read server file: $!\n";
+	$file = open FILE, $serverfilename or return %addresses;
 	while (my $line = <FILE>) {
 		$line =~ s/;.*//;
 		if (!$line) { next; }
