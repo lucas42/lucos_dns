@@ -1,0 +1,39 @@
+@       IN      SOA     l42.eu. bind.lukeblaney.co.uk. (
+                             28         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                        60 )            ; Negative Cache TTL
+;
+
+@               IN      A       37.59.63.122
+*               IN      A       212.110.189.17
+@               IN      NS      dns.l42.eu.
+@               IN      TXT     google-site-verification=A2baH0gCFFUF4pICanDH0I1NS7aZ0myI5DLfSZ4axIc
+home            IN      CNAME   interceptor.s
+progs           IN      CNAME   home
+progs2          IN      CNAME   prometheus.s
+private         IN      CNAME   home
+vlc             IN      CNAME   home
+nas             IN      CNAME   home
+btrouter        IN      CNAME   home
+dlinkrouter     IN      CNAME   home
+staticmedia     IN      CNAME   home
+photos          IN      CNAME   home
+zabbix          IN      CNAME   thunderbird5.s
+puppetdb        IN      CNAME   sssesperanto.s
+contacts        IN      CNAME   olympiccarrier.s
+am              IN      CNAME   daedalus.s
+auth            IN      CNAME   daedalus.s
+speak           IN      CNAME   daedalus.s
+notes           IN      CNAME   daedalus.s
+ceol            IN      CNAME   daedalus.s
+seinn           IN      CNAME   daedalus.s
+media-api       IN      CNAME   daedalus.s
+phys            IN      CNAME   webstar.s
+
+@       IN      MX      1       aspmx.l.google.com.
+@       IN      MX      5       alt1.aspmx.l.google.com.
+@       IN      MX      5       alt2.aspmx.l.google.com.
+@       IN      MX      10      aspmx2.googlemail.com.
+@       IN      MX      10      aspmx3.googlemail.com.
