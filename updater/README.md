@@ -1,4 +1,4 @@
-#lucos DNS
+# lucos DNS Updater
 A lightweight dynamic DNS tool for updating bind config.
 
 ## Dependancies
