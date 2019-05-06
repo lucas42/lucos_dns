@@ -4,7 +4,8 @@ RUN apk --update add bind # Needed for rndc package (bind server itself has it o
 RUN apk --update add perl perl-config-simple perl-http-message perl-libwww perl-json
 
 WORKDIR /usr/src/app
-COPY . .
+COPY server.pl .
+COPY rndc.conf /etc/bind/
 
 RUN echo "serverfilename    /etc/bind/dynamic/s.l42.eu" >> config
 RUN echo "servicefilename   /etc/bind/dynamic/b.l42.eu" >> config

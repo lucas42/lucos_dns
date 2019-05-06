@@ -8,7 +8,7 @@ services:
         - "53:53/udp"
         - "953:953"
       volumes:
-        - "dynamicdnsconfig:/etc/bind/dynamic"
+        - "dynamicconfig:/etc/bind/dynamic"
       image: lucas42/lucos_dns_bind
 
     updater:
@@ -20,8 +20,8 @@ services:
         - "ADMINEMAIL=bind.lukeblaney.co.uk."
         - APIKEY
       volumes:
-        - "dynamicdnsconfig:/etc/bind/dynamic"
+        - "dynamicconfig:/etc/bind/dynamic"
       image: lucas42/lucos_dns_updater
 
 volumes:
-  dynamicdnsconfig:
+  dynamicconfig:

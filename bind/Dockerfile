@@ -10,4 +10,4 @@ EXPOSE 53
 EXPOSE 53/udp
 EXPOSE 953
 
-CMD ["/usr/sbin/named", "-c", "/etc/bind/named.conf", "-g"]
+CMD ["./startup.sh"]
