@@ -28,6 +28,8 @@ $nameserver = $service_domains->{'dnsupdater'};
 $rootdomain = $service_domains->{'root'};
 $domainname = "s.$rootdomain";
 
+$routeripaddress = $ENV{'ROUTERIP'} or "127.0.0.1";
+
 $currenthostname = `hostname -s`;
 chomp($currenthostname);
 %aliases = ();
@@ -80,7 +82,7 @@ while($client = $server->accept()) {
 		}
 		elsif ($_ eq "\n") { last; }
 	}
-	if ($ipaddress == "127.0.0.1" and $headers{'X-Forwarded-For'} =~ /^[\.0-9]+$/) {
+	if (($ipaddress == $routeripaddress) and $headers{'X-Forwarded-For'} =~ /^[\.0-9]+$/) {
 		$ipaddress = $headers{'X-Forwarded-For'};
 	}
 	if ($path =~ m~/servers/(\w+)~) {

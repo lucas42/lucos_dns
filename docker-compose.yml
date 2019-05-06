@@ -19,6 +19,7 @@ services:
       environment:
         - "ADMINEMAIL=bind.lukeblaney.co.uk."
         - APIKEY
+        - ROUTERIP
       volumes:
         - "dynamicconfig:/etc/bind/dynamic"
       image: lucas42/lucos_dns_updater

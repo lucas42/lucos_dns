@@ -22,7 +22,7 @@ Requests must include a HTTP Authorization header whose value is "key <apikey>" 
 
 ## Proxy Servers
 Requests shouldn't be routed through any proxy servers as this will result in the proxy server's IP address being recorded rather than the original machine.
-The only exception to this is where the proxy server: a) is running on the same machine as this script, and b) adds an X-Forwarded-For header to the request
+The only exception to this is where the proxy server: a) has an IP address matching the environment variable ROUTERIP (defaults to 127.0.0.1), and b) adds an X-Forwarded-For header to the request
 
 ## Security
 Security here is minimal.  Using it outside of networks you control is inadvisable, as the current setup is vunerable to replay attacks.  Consider running any requests on external networks over https to avoid evesdropping.
