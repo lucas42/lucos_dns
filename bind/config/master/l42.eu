@@ -7,6 +7,7 @@
 ;
 
 @               IN      A       37.59.63.122
+dns             IN      A       37.59.63.122; Authoriative record kept by registrar.
 *               IN      A       212.110.189.17
 @               IN      NS      dns.l42.eu.
 @               IN      TXT     google-site-verification=A2baH0gCFFUF4pICanDH0I1NS7aZ0myI5DLfSZ4axIc
@@ -31,7 +32,6 @@ ceol            IN      CNAME   daedalus.s
 seinn           IN      CNAME   vorchan.s
 media-api       IN      CNAME   daedalus.s
 phys            IN      CNAME   webstar.s
-dns             IN      CNAME   vorchan.s; Authoriative record for this should be an A record with the registrar - just included here for completeness
 
 @       IN      MX      1       aspmx.l.google.com.
 @       IN      MX      5       alt1.aspmx.l.google.com.
