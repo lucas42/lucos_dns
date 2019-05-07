@@ -24,11 +24,11 @@ zabbix          IN      CNAME   thunderbird5.s
 puppetdb        IN      CNAME   sssesperanto.s
 contacts        IN      CNAME   olympiccarrier.s
 am              IN      CNAME   daedalus.s
-auth            IN      CNAME   daedalus.s
+auth            IN      CNAME   vorchan.s
 speak           IN      CNAME   daedalus.s
 notes           IN      CNAME   daedalus.s
 ceol            IN      CNAME   daedalus.s
-seinn           IN      CNAME   daedalus.s
+seinn           IN      CNAME   vorchan.s
 media-api       IN      CNAME   daedalus.s
 phys            IN      CNAME   webstar.s
 dns             IN      CNAME   vorchan.s; Authoriative record for this should be an A record with the registrar - just included here for completeness
