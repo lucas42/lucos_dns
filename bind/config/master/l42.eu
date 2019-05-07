@@ -31,6 +31,7 @@ ceol            IN      CNAME   daedalus.s
 seinn           IN      CNAME   daedalus.s
 media-api       IN      CNAME   daedalus.s
 phys            IN      CNAME   webstar.s
+dns             IN      CNAME   vorchan.s; Authoriative record for this should be an A record with the registrar - just included here for completeness
 
 @       IN      MX      1       aspmx.l.google.com.
 @       IN      MX      5       alt1.aspmx.l.google.com.
