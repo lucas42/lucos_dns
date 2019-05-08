@@ -1,55 +1,29 @@
 #!/usr/bin/perl
 use IO::Socket qw(:DEFAULT :crlf);
 use Config::Simple;
-use HTTP::Request;     # For simple http requests
-use LWP::UserAgent;
 use JSON qw( decode_json ); # For decoding json
 
 local($/) = LF;
 my $port = $ARGV[0];
-my $servicesdomain = $ARGV[1];
 
 Config::Simple->import_from('config', \%Config);
 my $serverfilename = $Config{serverfilename};
-my $servicefilename = $Config{servicefilename};
 
 my $apikey = $ENV{'APIKEY'};
 my $emailaddr = $ENV{'ADMINEMAIL'};
 if (!$apikey) { die "Missing environment variable APIKEY\n"; }
 if (!$emailaddr) { die "Missing environment variable ADMINEMAIL\n"; }
 
-# Get a list of all the services running in lucos
-my $hostsurl = "http://$servicesdomain/api/hosts";
-my $request = HTTP::Request->new(GET => $hostsurl);
-my $ua = LWP::UserAgent->new;
-my $response = $ua->request($request);
-my $service_domains = decode_json( $response->content );
-$nameserver = $service_domains->{'dnsupdater'};
-$rootdomain = $service_domains->{'root'};
-$domainname = "s.$rootdomain";
+$rootdomain = "l42.eu";
+$nameserver = "dns.$rootdomain";
+$serverdomainsuffix = "s.$rootdomain";
 
 $routeripaddress = $ENV{'ROUTERIP'} or "127.0.0.1";
-
-$currenthostname = `hostname -s`;
-chomp($currenthostname);
-%aliases = ();
-while (my($host, $address) = each %service_domains) {
-
-	if ($address eq $rootdomain) {
-		$rel = "@";
-	} elsif ($address =~ /\.${rootdomain}$/) {
-		$rel = $address;
-		$rel =~ s/\.${rootdomain}$//
-	} else {
-		$rel = "$address.";
-	}
-	$aliases{$rel} = "$currenthostname";
-}
 
 # Parse the existing bind config
 my %addresses = parseServers();
 
-# Rewrite service config to include all the CNAMES for services running in lucos
+# Rewrite config to ensure config dosen't contain any unparsed info
 outputAllConfig();
 
 my $server = new IO::Socket::INET (
@@ -59,9 +33,7 @@ my $server = new IO::Socket::INET (
 	Reuse => 1,
 );
 
-$| = 1; # Make sure stdout isn't buffered, so output gets seen by service module
-
-
+$| = 1; # Make sure stdout isn't buffered
 
 die "Could not create serveret: $!\n" unless $server;
 print "Server running on port $port\n";
@@ -108,11 +80,11 @@ while($client = $server->accept()) {
 		if ($address) {
 			print $client "HTTP/1.1 200 Found\n";
 			print $client "Content-type: text/plain\n\n";
-			print $client "The address for $host.$domainname is $address.\n\n";
+			print $client "The address for $host.$serverdomainsuffix is $address.\n\n";
 		} else {
 			print $client "HTTP/1.1 404 Server not Found\n";
 			print $client "Content-type: text/plain\n\n";
-			print $client "Can't find an address for $host.$domainname.\n\n";
+			print $client "Can't find an address for $host.$serverdomainsuffix.\n\n";
 		}
 	} else {
 		print $client "HTTP/1.1 404 Not Found\n";
@@ -144,7 +116,7 @@ sub outputServers {
 ; BIND data file for lucOS servers
 ; NB: This file is modified automatically by lucOS
 ;
-@       IN      SOA     $domainname. $emailaddr (
+@       IN      SOA     $serverdomainsuffix. $emailaddr (
 $timestamp	; Serial
 604800 		; Refresh
 86400 		; Retry
@@ -163,36 +135,8 @@ $timestamp	; Serial
 }
 
 
-sub outputServices {
-	my $timestamp = time;
-	my $output = ";
-; BIND data file for lucOS services
-; NB: This file is modified automatically by lucOS
-;
-@       IN      SOA     $rootdomain. $emailaddr (
-$timestamp	; Serial
-604800 		; Refresh
-86400 		; Retry
-2419200		; Expire
-60 )		; Negative Cache TTL
-;\n";
-	$output .= "@       IN      NS      example.org.\n";
-	while (my($host, $server) = each %aliases) {
-		
-		# Ideally a CNAME would be used here, but bind doesn't like CNAMEs for the root domain
-		$address = $addresses{$server};
-		if (!$address) { next; }
-		$output .= "$host\t\IN\tA\t$address\n";
-	}
-	open FILE, ">", $servicefilename or die "Could not write to service file: $!\n";
-	print FILE $output;
-	close FILE;
-	print "Updated services config file\n";
-}
-
 sub outputAllConfig {
 	outputServers();
-	outputServices();
 	system("/usr/sbin/rndc", "reload");
 	if ( $? == 0) {
 		print "Bind reloaded\n";
