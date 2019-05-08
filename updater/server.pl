@@ -1,30 +1,26 @@
 #!/usr/bin/perl
 use IO::Socket qw(:DEFAULT :crlf);
-use Config::Simple;
-use JSON qw( decode_json ); # For decoding json
 
 local($/) = LF;
 my $port = $ARGV[0];
-
-Config::Simple->import_from('config', \%Config);
-my $serverfilename = $Config{serverfilename};
 
 my $apikey = $ENV{'APIKEY'};
 my $emailaddr = $ENV{'ADMINEMAIL'};
 if (!$apikey) { die "Missing environment variable APIKEY\n"; }
 if (!$emailaddr) { die "Missing environment variable ADMINEMAIL\n"; }
 
-$rootdomain = "l42.eu";
-$nameserver = "dns.$rootdomain";
-$serverdomainsuffix = "s.$rootdomain";
+my $rootdomain = "l42.eu";
+my $nameserver = "dns.$rootdomain";
+my $serverdomainsuffix = "s.$rootdomain";
+my $serverfilename = "/etc/bind/dynamic/$serverdomainsuffix";
 
-$routeripaddress = $ENV{'ROUTERIP'} or "127.0.0.1";
+my $routeripaddress = $ENV{'ROUTERIP'} or "127.0.0.1";
 
 # Parse the existing bind config
 my %addresses = parseServers();
 
 # Rewrite config to ensure config dosen't contain any unparsed info
-outputAllConfig();
+outputServers();
 
 my $server = new IO::Socket::INET (
 	LocalPort => $port,
@@ -73,7 +69,7 @@ while($client = $server->accept()) {
 			if ($addresses{$host} ne $ipaddress) {
 				$addresses{$host} = $ipaddress;
 				print "update triggered by $host\n";
-				outputAllConfig();
+				outputServers();
 			}
 		}
 		my $address = $addresses{$host};
@@ -132,12 +128,9 @@ $timestamp	; Serial
 	print FILE $output;
 	close FILE;
 	print "Updated servers config file\n";
-}
 
 
-sub outputAllConfig {
-	outputServers();
-	system("/usr/sbin/rndc", "reload");
+	system("/usr/sbin/rndc", "reload", $serverdomainsuffix);
 	if ( $? == 0) {
 		print "Bind reloaded\n";
 	} else {
