@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 use IO::Socket qw(:DEFAULT :crlf);
-
 local($/) = LF;
-my $port = $ARGV[0];
 
 my $apikey = $ENV{'APIKEY'};
 my $emailaddr = $ENV{'ADMINEMAIL'};
+my $port = $ENV{'PORT'} or 80;
+my $routeripaddress = $ENV{'ROUTERIP'} or "127.0.0.1";
 if (!$apikey) { die "Missing environment variable APIKEY\n"; }
 if (!$emailaddr) { die "Missing environment variable ADMINEMAIL\n"; }
 
@@ -13,8 +13,6 @@ my $rootdomain = "l42.eu";
 my $nameserver = "dns.$rootdomain";
 my $serverdomainsuffix = "s.$rootdomain";
 my $serverfilename = "/etc/bind/dynamic/$serverdomainsuffix";
-
-my $routeripaddress = $ENV{'ROUTERIP'} or "127.0.0.1";
 
 # Parse the existing bind config
 my %addresses = parseServers();
@@ -128,7 +126,6 @@ $timestamp	; Serial
 	print FILE $output;
 	close FILE;
 	print "Updated servers config file\n";
-
 
 	system("/usr/sbin/rndc", "reload", $serverdomainsuffix);
 	if ( $? == 0) {
