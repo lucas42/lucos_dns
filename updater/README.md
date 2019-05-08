@@ -3,8 +3,7 @@ A lightweight dynamic DNS tool for updating bind config.
 
 ## Dependancies
 * perl
-* [perl Config::Simple](https://metacpan.org/module/Config::Simple)
-* A bind server running on the same machine
+* rndc (configured to send commands to a bind server whose config is being updated)
 
 ## Environment Variables
 The script accepts the following environment varibles.
