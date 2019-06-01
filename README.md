@@ -19,6 +19,6 @@ Uses docker-compose:
 
 To build all componets, run `docker-compose build`
 
-To combine building & running in a single command, run `APIKEY=apikeygoeshere ROUTERIP=127.0.0.1 docker-compose --build up`
+To combine building & running in a single command, run `APIKEY=apikeygoeshere ROUTERIP=127.0.0.1 docker-compose up --build`
 
 Both components are configured to build in Dockerhub when a commit is pushed to the master branch in github.
