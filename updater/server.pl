@@ -95,9 +95,9 @@ sub parseServers {
 	while (my $line = <FILE>) {
 		$line =~ s/;.*//;
 		if (!$line) { next; }
-		if ($line =~ m/(.+)\s+IN\s+A\s+([\d\.]+)/i) {
+		if ($line =~ m/(.+?)\s+IN\s+A\s+([\d\.]+)/i) {
 			$addresses{$1} = $2;
-			print "Found address for host $1 ($2)\n";
+			print "Found address for host \"$1\" ($2)\n";
 		}
 	}
 	close FILE;
