@@ -32,6 +32,7 @@ ceol            IN      CNAME   daedalus.s
 seinn           IN      CNAME   vorchan.s
 media-api       IN      CNAME   daedalus.s
 phys            IN      CNAME   webstar.s
+googlecontacsync IN     CNAME   vorchan.s
 
 @       IN      MX      1       aspmx.l.google.com.
 @       IN      MX      5       alt1.aspmx.l.google.com.
