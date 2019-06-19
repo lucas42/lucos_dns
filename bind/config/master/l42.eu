@@ -31,7 +31,7 @@ notes           IN      CNAME   daedalus.s
 ceol            IN      CNAME   daedalus.s
 seinn           IN      CNAME   vorchan.s
 media-api       IN      CNAME   daedalus.s
-phys            IN      CNAME   webstar.s
+phys            IN      CNAME   vorchan.s
 googlecontactsync IN    CNAME   vorchan.s
 
 @       IN      MX      1       aspmx.l.google.com.
