@@ -24,7 +24,7 @@ photos          IN      CNAME   home
 zabbix          IN      CNAME   thunderbird5.s
 puppetdb        IN      CNAME   sssesperanto.s
 contacts        IN      CNAME   olympiccarrier.s
-am              IN      CNAME   daedalus.s
+am              IN      CNAME   vorchan.s
 auth            IN      CNAME   vorchan.s
 speak           IN      CNAME   daedalus.s
 notes           IN      CNAME   daedalus.s
