@@ -26,7 +26,7 @@ puppetdb        IN      CNAME   sssesperanto.s
 contacts        IN      CNAME   olympiccarrier.s
 am              IN      CNAME   vorchan.s
 auth            IN      CNAME   vorchan.s
-speak           IN      CNAME   daedalus.s
+speak           IN      CNAME   vorchan.s
 notes           IN      CNAME   daedalus.s
 ceol            IN      CNAME   daedalus.s
 seinn           IN      CNAME   vorchan.s
