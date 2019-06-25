@@ -13,7 +13,6 @@ dns             IN      A       37.59.63.122; Authoriative record kept by regist
 @               IN      TXT     google-site-verification=A2baH0gCFFUF4pICanDH0I1NS7aZ0myI5DLfSZ4axIc
 home            IN      CNAME   interceptor.s
 progs           IN      CNAME   home
-progs2          IN      CNAME   prometheus.s
 private         IN      CNAME   home
 vlc             IN      CNAME   home
 nas             IN      CNAME   home
@@ -22,7 +21,6 @@ dlinkrouter     IN      CNAME   home
 staticmedia     IN      CNAME   home
 photos          IN      CNAME   home
 zabbix          IN      CNAME   thunderbird5.s
-puppetdb        IN      CNAME   sssesperanto.s
 contacts        IN      CNAME   vorchan.s
 am              IN      CNAME   vorchan.s
 auth            IN      CNAME   vorchan.s
