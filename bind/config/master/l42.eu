@@ -25,7 +25,7 @@ contacts        IN      CNAME   vorchan.s
 am              IN      CNAME   vorchan.s
 auth            IN      CNAME   vorchan.s
 speak           IN      CNAME   vorchan.s
-notes           IN      CNAME   daedalus.s
+notes           IN      CNAME   vorchan.s
 ceol            IN      CNAME   vorchan.s
 seinn           IN      CNAME   vorchan.s
 media-api       IN      CNAME   daedalus.s
