@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use IO::Socket qw(:DEFAULT :crlf);
+use JSON;
 local($/) = LF;
 
 my $apikey = $ENV{'APIKEY'};
@@ -80,6 +81,18 @@ while($client = $server->accept()) {
 			print $client "Content-type: text/plain\n\n";
 			print $client "Can't find an address for $host.$serverdomainsuffix.\n\n";
 		}
+	} elsif ($path == "/_info") {
+		%checks = ();
+		%metric = ();
+		my %info = (
+			system  => "lucos_dns_updater",
+			checks  => \%checks,
+			metrics => \%metrics,
+		);
+		$output = encode_json \%info;
+		print $client "HTTP/1.1 200 Found\n";
+		print $client "Content-Type: application/json; charset=UTF-8\n\n";
+		print $client "$output\n";
 	} else {
 		print $client "HTTP/1.1 404 Not Found\n";
 		print $client "\n";
