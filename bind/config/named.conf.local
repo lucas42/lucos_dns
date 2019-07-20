@@ -1,29 +1,24 @@
 zone "lukeblaney.co.uk" {
         type master;
         file "/etc/bind/master/lukeblaney.co.uk";
-        allow-transfer { 212.227.123.29; };
 };
 
 zone "l42.eu" {
         type master;
         file "/etc/bind/master/l42.eu";
-        allow-transfer { 212.227.123.29; };
 };
 
 zone "rowanblaney.co.uk" {
         type master;
         file "/etc/bind/master/rowanblaney.co.uk";
-        allow-transfer { 212.227.123.29; };
 };
 
 zone "tfluke.uk" {
         type master;
         file "/etc/bind/master/tfluke.uk";
-        allow-transfer { 212.227.123.29; };
 };
 
 zone "s.l42.eu" {
         type master;
         file "/etc/bind/dynamic/s.l42.eu";
-        allow-transfer { 212.227.123.29; };
 };
