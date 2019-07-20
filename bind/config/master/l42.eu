@@ -1,5 +1,5 @@
 @       IN      SOA     l42.eu. bind.lukeblaney.co.uk. (
-                             29         ; Serial
+                             30         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -31,6 +31,7 @@ seinn           IN      CNAME   vorchan.s
 media-api       IN      CNAME   vorchan.s
 phys            IN      CNAME   vorchan.s
 googlecontactsync IN    CNAME   vorchan.s
+monitoring      IN      CNAME   vorchan.s
 
 @       IN      MX      1       aspmx.l.google.com.
 @       IN      MX      5       alt1.aspmx.l.google.com.
