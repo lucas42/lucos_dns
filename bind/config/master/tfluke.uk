@@ -1,12 +1,12 @@
 @       IN      SOA     tfluke.uk. bind.lukeblaney.co.uk. (
-                             22         ; Serial
+                             23         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
                         60 )            ; Negative Cache TTL
 ;
 
-@       IN      A       37.59.63.122
+@       IN      A       91.121.122.183
 @       IN      NS      dns.l42.eu.
 app     IN      CNAME   tfluke.uk.
 www     IN      CNAME   tfluke.uk.

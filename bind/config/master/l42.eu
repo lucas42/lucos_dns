@@ -1,13 +1,13 @@
 @       IN      SOA     l42.eu. bind.lukeblaney.co.uk. (
-                             30         ; Serial
+                             31         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
                         60 )            ; Negative Cache TTL
 ;
 
-@               IN      A       37.59.63.122
-dns             IN      A       37.59.63.122; Authoriative record kept by registrar.
+@               IN      A       91.121.122.183
+dns             IN      A       91.121.122.183; Authoriative record kept by registrar.
 *               IN      A       212.110.189.17
 @               IN      NS      dns.l42.eu.
 @               IN      TXT     google-site-verification=A2baH0gCFFUF4pICanDH0I1NS7aZ0myI5DLfSZ4axIc
@@ -20,18 +20,17 @@ btrouter        IN      CNAME   home
 dlinkrouter     IN      CNAME   home
 staticmedia     IN      CNAME   home
 photos          IN      CNAME   home
-zabbix          IN      CNAME   thunderbird5.s
-contacts        IN      CNAME   vorchan.s
-am              IN      CNAME   vorchan.s
-auth            IN      CNAME   vorchan.s
-speak           IN      CNAME   vorchan.s
-notes           IN      CNAME   vorchan.s
-ceol            IN      CNAME   vorchan.s
-seinn           IN      CNAME   vorchan.s
-media-api       IN      CNAME   vorchan.s
-phys            IN      CNAME   vorchan.s
-googlecontactsync IN    CNAME   vorchan.s
-monitoring      IN      CNAME   vorchan.s
+contacts        IN      CNAME   valen.s
+am              IN      CNAME   valen.s
+auth            IN      CNAME   valen.s
+speak           IN      CNAME   valen.s
+notes           IN      CNAME   valen.s
+ceol            IN      CNAME   valen.s
+seinn           IN      CNAME   valen.s
+media-api       IN      CNAME   valen.s
+phys            IN      CNAME   valen.s
+googlecontactsync IN    CNAME   valen.s
+monitoring      IN      CNAME   valen.s
 
 @       IN      MX      1       aspmx.l.google.com.
 @       IN      MX      5       alt1.aspmx.l.google.com.
