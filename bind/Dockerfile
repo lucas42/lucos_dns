@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk --update add bind 
+RUN apk --update add bind bind-tools
 
 WORKDIR /etc/bind
 RUN rm named.conf.*
