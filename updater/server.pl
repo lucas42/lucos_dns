@@ -82,12 +82,16 @@ while($client = $server->accept()) {
 			print $client "Can't find an address for $host.$serverdomainsuffix.\n\n";
 		}
 	} elsif ($path == "/_info") {
-		%checks = ();
-		%metric = ();
+		my %checks = ();
+		my %metric = ();
+		my %ci = (
+			circle => "gh/lucas42/lucos_dns",
+		);
 		my %info = (
 			system  => "lucos_dns_updater",
 			checks  => \%checks,
 			metrics => \%metrics,
+			ci      => \%ci,
 		);
 		$output = encode_json \%info;
 		print $client "HTTP/1.1 200 Found\n";
