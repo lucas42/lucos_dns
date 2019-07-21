@@ -15,7 +15,7 @@ services:
       build: ./updater
       container_name: dnsupdater
       ports:
-        - "8012:8080"
+        - "8012:8012"
       environment:
         - "ADMINEMAIL=bind.lukeblaney.co.uk."
         - APIKEY

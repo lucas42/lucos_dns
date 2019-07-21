@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY server.pl .
 COPY rndc.conf /etc/bind/
 
-ENV PORT 8080
+ENV PORT 8012
 EXPOSE $PORT
 
 CMD ["perl", "server.pl"]
