@@ -14,6 +14,7 @@ home            IN      CNAME   interceptor.s
 private         IN      CNAME   interceptor.s
 staticmedia     IN      CNAME   interceptor.s
 nas             IN      CNAME   interceptor.s
+ssh             IN      CNAME   valen.s
 contacts        IN      CNAME   valen.s
 am              IN      CNAME   valen.s
 auth            IN      CNAME   valen.s
@@ -25,7 +26,7 @@ media-api       IN      CNAME   valen.s
 phys            IN      CNAME   valen.s
 googlecontactsync IN    CNAME   valen.s
 monitoring      IN      CNAME   valen.s
-router			IN      CNAME   valen.s
+router          IN      CNAME   valen.s
 
 @       IN      MX      1       aspmx.l.google.com.
 @       IN      MX      5       alt1.aspmx.l.google.com.
