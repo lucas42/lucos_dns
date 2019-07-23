@@ -1,13 +1,11 @@
 @       IN      SOA     rowanblaney.co.uk. bind.lukeblaney.co.uk. (
-                             13         ; Serial
+                             14         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
                         21600 )         ; Negative Cache TTL
 ;
 
-*       IN      A       212.110.189.17
-@       IN      A       212.110.189.17
 @       IN      NS      dns.l42.eu.
 home    IN      CNAME   ghs.google.com.
 boat    IN      CNAME   ghs.google.com.
