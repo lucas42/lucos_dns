@@ -1,16 +1,5 @@
 version: '3'
 services:
-    bind:
-      build: ./bind
-      container_name: bind
-      ports: 
-        - "53:53"
-        - "53:53/udp"
-        - "953:953"
-      volumes:
-        - "dynamicconfig:/etc/bind/dynamic"
-      image: lucas42/lucos_dns_bind
-
     updater:
       build: ./updater
       container_name: dnsupdater
@@ -23,6 +12,17 @@ services:
       volumes:
         - "dynamicconfig:/etc/bind/dynamic"
       image: lucas42/lucos_dns_updater
+
+    bind:
+      build: ./bind
+      container_name: bind
+      ports:
+        - "53:53"
+        - "53:53/udp"
+        - "953:953"
+      volumes:
+        - "dynamicconfig:/etc/bind/dynamic"
+      image: lucas42/lucos_dns_bind
 
 volumes:
   dynamicconfig:
