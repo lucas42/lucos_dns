@@ -1,5 +1,5 @@
 @       IN      SOA     l42.eu. bind.lukeblaney.co.uk. (
-                             33        ; Serial
+                             34        ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -10,10 +10,10 @@
 dns             IN      A       91.121.122.183; Authoriative record kept by registrar.    
 @               IN      NS      dns.l42.eu.
 @               IN      TXT     google-site-verification=A2baH0gCFFUF4pICanDH0I1NS7aZ0myI5DLfSZ4axIc
-home            IN      CNAME   interceptor.s
-private         IN      CNAME   interceptor.s
-staticmedia     IN      CNAME   interceptor.s
-nas             IN      CNAME   interceptor.s
+home            IN      CNAME   xwing.s
+private         IN      CNAME   xwing.s
+staticmedia     IN      CNAME   xwing.s
+nas             IN      CNAME   xwing.s
 ssh             IN      CNAME   valen.s
 contacts        IN      CNAME   valen.s
 am              IN      CNAME   valen.s
