@@ -49,3 +49,7 @@ workflows:
           context: docker
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - main
