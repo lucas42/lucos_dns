@@ -1,5 +1,5 @@
 @       IN      SOA     l42.eu. bind.lukeblaney.co.uk. (
-                             35         ; Serial
+                             36         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -26,6 +26,8 @@ media-api       IN      CNAME   valen.s
 phys            IN      CNAME   valen.s
 googlecontactsync IN    CNAME   valen.s
 monitoring      IN      CNAME   valen.s
+valen.file-sync IN      CNAME   valen.s
+xwing.file-sync IN      CNAME   xwing.s
 
 @       IN      MX      1       aspmx.l.google.com.
 @       IN      MX      5       alt1.aspmx.l.google.com.
