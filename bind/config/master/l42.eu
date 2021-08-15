@@ -25,7 +25,7 @@ seinn           IN      CNAME   valen.s
 media-api       IN      CNAME   valen.s
 phys            IN      CNAME   valen.s
 googlecontactsync IN    CNAME   valen.s
-monitoring      IN      CNAME   valen.s
+monitoring      IN      CNAME   avalon.s
 valen.file-sync IN      CNAME   valen.s
 xwing.file-sync IN      CNAME   xwing.s
 loganne         IN      CNAME	valen.s
