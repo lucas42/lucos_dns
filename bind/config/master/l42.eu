@@ -1,5 +1,5 @@
 @       IN      SOA     l42.eu. bind.lukeblaney.co.uk. (
-                             42         ; Serial
+                             43         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -8,6 +8,7 @@
 
 @                 IN      A       178.32.218.44
 dns               IN      A       178.32.218.44
+dns2              IN      A       178.32.218.44
 @                 IN      NS      dns.l42.eu.
 @                 IN      TXT     google-site-verification=A2baH0gCFFUF4pICanDH0I1NS7aZ0myI5DLfSZ4axIc
 home              IN      CNAME   xwing.s
