@@ -49,10 +49,6 @@ while($client = $server->accept()) {
 		elsif ($_ eq "\n") { last; }
 	}
 
-	# If the request came from one of these private IP ranges, then use the X-Forwarded-For header
-	if (($ipaddress =~ /(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)/) and $headers{'X-Forwarded-For'} =~ /^[\.0-9]+$/) {
-		$ipaddress = $headers{'X-Forwarded-For'};
-	}
 	if ($path =~ m~/servers/(\w+)~) {
 		$host = $1;
 		if ($method eq "PUT") {
@@ -60,9 +56,15 @@ while($client = $server->accept()) {
 				print $client "HTTP/1.1 403 Forbidden\n";
 				print $client "Content-type: text/plain\n\n";
 				print $client "Access denied\n";
-				print STDERR "Failed attempt from $ipaddress to change host $host.\n";
+				print STDERR "Failed attempt from $ipaddress (XFF: $headers{'X-Forwarded-For'}) to change host $host.\n";
 				close $client;
 				next;
+			}
+
+			# If there's an X-Forwarded-For header, use that instead
+			# We can trust this as the Authorization header has already been checked
+			if ($headers{'X-Forwarded-For'} =~ /^[\.0-9]+$/) {
+				$ipaddress = $headers{'X-Forwarded-For'};
 			}
 			
 			# Only update if there's been a change
