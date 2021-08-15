@@ -6,30 +6,30 @@
                         60 )            ; Negative Cache TTL
 ;
 
-@               IN      A       91.121.122.183
-dns             IN      A       91.121.122.183; Authoriative record kept by registrar.    
-@               IN      NS      dns.l42.eu.
-@               IN      TXT     google-site-verification=A2baH0gCFFUF4pICanDH0I1NS7aZ0myI5DLfSZ4axIc
-home            IN      CNAME   xwing.s
-private         IN      CNAME   xwing.s
-staticmedia     IN      CNAME   xwing.s
-nas             IN      CNAME   xwing.s
-ssh             IN      CNAME   valen.s
-contacts        IN      CNAME   valen.s
-am              IN      CNAME   valen.s
-auth            IN      CNAME   valen.s
-speak           IN      CNAME   valen.s
-notes           IN      CNAME   valen.s
-ceol            IN      CNAME   valen.s
-seinn           IN      CNAME   valen.s
-media-api       IN      CNAME   valen.s
-phys            IN      CNAME   valen.s
-googlecontactsync IN    CNAME   valen.s
-monitoring      IN      CNAME   avalon.s
-valen.file-sync IN      CNAME   valen.s
-xwing.file-sync IN      CNAME   xwing.s
-loganne         IN      CNAME	valen.s
-media-metadata  IN      CNAME	valen.s
+@                 IN      A       91.121.122.183
+dns               IN      A       91.121.122.183; Authoriative record kept by registrar.
+@                 IN      NS      dns.l42.eu.
+@                 IN      TXT     google-site-verification=A2baH0gCFFUF4pICanDH0I1NS7aZ0myI5DLfSZ4axIc
+home              IN      CNAME   xwing.s
+private           IN      CNAME   xwing.s
+staticmedia       IN      CNAME   xwing.s
+nas               IN      CNAME   xwing.s
+ssh               IN      CNAME   valen.s
+contacts          IN      CNAME   valen.s
+am                IN      CNAME   valen.s
+auth              IN      CNAME   valen.s
+speak             IN      CNAME   valen.s
+notes             IN      CNAME   valen.s
+ceol              IN      CNAME   valen.s
+seinn             IN      CNAME   valen.s
+media-api         IN      CNAME   valen.s
+phys              IN      CNAME   valen.s
+googlecontactsync IN      CNAME   valen.s
+monitoring        IN      CNAME   avalon.s
+valen.file-sync   IN      CNAME   valen.s
+xwing.file-sync   IN      CNAME   xwing.s
+loganne           IN      CNAME   valen.s
+media-metadata    IN      CNAME   valen.s
 
 @       IN      MX      1       aspmx.l.google.com.
 @       IN      MX      5       alt1.aspmx.l.google.com.
