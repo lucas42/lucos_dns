@@ -6,7 +6,6 @@ local($/) = LF;
 my $apikey = $ENV{'APIKEY'};
 my $emailaddr = $ENV{'ADMINEMAIL'};
 my $port = $ENV{'PORT'} or 80;
-my $routeripaddress = $ENV{'ROUTERIP'} or "127.0.0.1";
 if (!$apikey) { die "Missing environment variable APIKEY\n"; }
 if (!$emailaddr) { die "Missing environment variable ADMINEMAIL\n"; }
 
@@ -49,7 +48,9 @@ while($client = $server->accept()) {
 		}
 		elsif ($_ eq "\n") { last; }
 	}
-	if (($ipaddress == $routeripaddress) and $headers{'X-Forwarded-For'} =~ /^[\.0-9]+$/) {
+
+	# If the request came from one of these private IP ranges, then use the X-Forwarded-For header
+	if (($ipaddress =~ /(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)/) and $headers{'X-Forwarded-For'} =~ /^[\.0-9]+$/) {
 		$ipaddress = $headers{'X-Forwarded-For'};
 	}
 	if ($path =~ m~/servers/(\w+)~) {
