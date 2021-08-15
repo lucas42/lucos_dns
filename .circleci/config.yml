@@ -15,3 +15,11 @@ workflows:
             branches:
               only:
                 - main
+      - lucos/deploy-avalon:
+          context: docker
+          requires:
+            - lucos/build-amd64
+          filters:
+            branches:
+              only:
+                - main
