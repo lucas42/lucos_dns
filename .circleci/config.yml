@@ -7,14 +7,6 @@ workflows:
     jobs:
       - lucos/build-amd64:
           context: docker
-      - lucos/deploy-valen:
-          context: docker
-          requires:
-            - lucos/build-amd64
-          filters:
-            branches:
-              only:
-                - main
       - lucos/deploy-avalon:
           context: docker
           requires:
