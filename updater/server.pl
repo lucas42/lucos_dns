@@ -86,8 +86,7 @@ while($client = $server->accept()) {
 				);
 				my $logannerequest = HTTP::Request->new(
 					'POST',
-					#'https://loganne.l42.eu/events',
-					'http://172.17.0.1:8019/events',
+					'https://loganne.l42.eu/events',
 					['Content-Type' => 'application/json; charset=UTF-8'],
 					encode_json(\%loganne_data),
 				);
