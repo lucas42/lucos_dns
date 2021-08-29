@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 use IO::Socket qw(:DEFAULT :crlf);
 use JSON;
+use HTTP::Request;
+use LWP::UserAgent;
 local($/) = LF;
 
 my $apikey = $ENV{'APIKEY'};
@@ -13,6 +15,8 @@ my $rootdomain = "l42.eu";
 my $nameserver = "dns.$rootdomain";
 my $serverdomainsuffix = "s.$rootdomain";
 my $serverfilename = "/etc/bind/dynamic/$serverdomainsuffix";
+
+my $loganneuseragent = LWP::UserAgent->new();
 
 # Parse the existing bind config
 my %addresses = parseServers();
@@ -72,6 +76,25 @@ while($client = $server->accept()) {
 				$addresses{$host} = $ipaddress;
 				print "update triggered by $host\n";
 				outputServers();
+				
+				my %loganne_data = (
+					type          => "dnsChange",
+					source        => 'lucos_dns_updater',
+					host          => $host,
+					ipAddress     => $ipaddress,
+					humanReadable => "IP Address for host $host changed to $ipaddress",
+				);
+				my $logannerequest = HTTP::Request->new(
+					'POST',
+					#'https://loganne.l42.eu/events',
+					'http://172.17.0.1:8019/events',
+					['Content-Type' => 'application/json; charset=UTF-8'],
+					encode_json(\%loganne_data),
+				);
+				my $loganneresponse = $loganneuseragent->request($logannerequest);
+				if (!$loganneresponse->is_success) {
+					print STDERR 'Error updating loganne: ', $loganneresponse->status_line, "\n";
+				}
 			}
 		}
 		my $address = $addresses{$host};
