@@ -1,9 +1,9 @@
 @       IN      SOA     lukeblaney.co.uk. bind.lukeblaney.co.uk. (
-                             14         ; Serial
+                             15         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
-                        21600 )         ; Negative Cache TTL
+                        60 )         ; Negative Cache TTL
 ;
 
 @       IN      A       178.32.218.44
@@ -22,3 +22,5 @@ id      IN      CNAME   www.myopenid.com.
 mail    IN      CNAME   ghs.google.com.
 docs    IN      CNAME   ghs.google.com.
 cal     IN      CNAME   ghs.google.com.
+
+ns1     IN      CNAME   dns.l42.eu.
