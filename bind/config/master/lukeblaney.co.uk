@@ -1,12 +1,12 @@
 @       IN      SOA     lukeblaney.co.uk. bind.lukeblaney.co.uk. (
-                             13         ; Serial
+                             14         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
                         21600 )         ; Negative Cache TTL
 ;
 
-@       IN      A       109.104.92.188
+@       IN      A       178.32.218.44
 @       IN      TXT     google-site-verification=yYbZX97HRQXV8XL_eMFP0EPzUkv9ww14Y0K8cIROnIA
 @       IN      NS      dns.l42.eu.
 
