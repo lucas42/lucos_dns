@@ -19,7 +19,6 @@ ssh               IN      CNAME   avalon.s
 contacts          IN      CNAME   avalon.s
 am                IN      CNAME   avalon.s
 auth              IN      CNAME   avalon.s
-speak             IN      CNAME   avalon.s
 notes             IN      CNAME   avalon.s
 ceol              IN      CNAME   avalon.s
 seinn             IN      CNAME   avalon.s
