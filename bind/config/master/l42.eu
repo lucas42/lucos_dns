@@ -1,5 +1,5 @@
 @       IN      SOA     l42.eu. bind.lukeblaney.co.uk. (
-                             47         ; Serial
+                             48         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -30,6 +30,7 @@ avalon.file-sync  IN      CNAME   avalon.s
 loganne           IN      CNAME   avalon.s
 media-metadata    IN      CNAME   avalon.s
 mail              IN      CNAME   avalon.s
+media-weighting   IN      CNAME   avalon.s
 @                 IN      TXT     "v=spf1 a:mail.l42.eu include:_spf.google.com ~all"
 _dmarc            IN      TXT     "v=DMARC1; p=quarantine; rua=mailto:postmaster@l42.eu; ruf=mailto:postmaster@l42.eu; sp=quarantine; ri=3600"
 
