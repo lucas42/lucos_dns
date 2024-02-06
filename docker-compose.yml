@@ -6,7 +6,7 @@ services:
     ports:
       - "8012:8012"
     environment:
-      - "ADMINEMAIL=bind.lukeblaney.co.uk."
+      - ADMINEMAIL
       - APIKEY
       - ROUTERIP
     volumes:
