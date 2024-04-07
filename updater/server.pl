@@ -3,6 +3,7 @@ use IO::Socket qw(:DEFAULT :crlf);
 use JSON;
 use HTTP::Request;
 use LWP::UserAgent;
+use Time::Piece;
 local($/) = LF;
 
 my $apikey = $ENV{'APIKEY'};
@@ -34,7 +35,7 @@ my $server = new IO::Socket::INET (
 $| = 1; # Make sure stdout isn't buffered
 
 die "Could not create serveret: $!\n" unless $server;
-print "Server running on port $port\n";
+writeLog("Server running on port $port");
 while($client = $server->accept()) {
    $client->autoflush(1);
 	my $path;
@@ -60,7 +61,7 @@ while($client = $server->accept()) {
 				print $client "HTTP/1.1 403 Forbidden\n";
 				print $client "Content-type: text/plain\n\n";
 				print $client "Access denied\n";
-				print STDERR "Failed attempt from $ipaddress (XFF: $headers{'X-Forwarded-For'}) to change host $host.\n";
+				writeLog("Failed attempt from $ipaddress (XFF: $headers{'X-Forwarded-For'}) to change host $host.", true);
 				close $client;
 				next;
 			}
@@ -74,7 +75,7 @@ while($client = $server->accept()) {
 			# Only update if there's been a change
 			if ($addresses{$host} ne $ipaddress) {
 				$addresses{$host} = $ipaddress;
-				print "update triggered by $host\n";
+				writeLog("update triggered by $host");
 				outputServers();
 				
 				my %loganne_data = (
@@ -92,7 +93,7 @@ while($client = $server->accept()) {
 				);
 				my $loganneresponse = $loganneuseragent->request($logannerequest);
 				if (!$loganneresponse->is_success) {
-					print STDERR 'Error updating loganne: ', $loganneresponse->status_line, "\n";
+					writeLog("Error updating loganne: ${loganneresponse->status_line}", true);
 				}
 			}
 		}
@@ -126,7 +127,7 @@ while($client = $server->accept()) {
 		print $client "HTTP/1.1 404 Not Found\n";
 		print $client "\n";
 		print $client "Not Found\n";
-		print STDERR "Not found: $path\n";
+		writeLog("Not found: $path", true);
 	}
 	close $client;
 }
@@ -139,7 +140,7 @@ sub parseServers {
 		if (!$line) { next; }
 		if ($line =~ m/(.+?)\s+IN\s+A\s+([\d\.]+)/i) {
 			$addresses{$1} = $2;
-			print "Found address for host \"$1\" ($2)\n";
+			writeLog("Found address for host \"$1\" ($2)");
 		}
 	}
 	close FILE;
@@ -167,12 +168,20 @@ $timestamp	; Serial
 	open FILE, ">", $serverfilename or die "Could not write to server file: $!\n";
 	print FILE $output;
 	close FILE;
-	print "Updated servers config file\n";
+	writeLog("Updated servers config file");
 
 	system("/usr/sbin/rndc", "reload", $serverdomainsuffix);
 	if ( $? == 0) {
-		print "Bind reloaded\n";
+		writeLog("Bind reloaded");
 	} else {
-		print STDERR "Error reloading bind $?\n";
+		writeLog("Error reloading bind $?", true);
 	}
+}
+
+sub writeLog {
+	my ($message, $error) = @_;
+	my $now_string = localtime->datetime;
+	my $handle = $error ? *STDERR : *STDOUT;
+	my $bash_colour = $error ? "0;31" : "1;37";  # Make errors red; everything else white
+	print $handle "\033[${bash_colour}m${now_string} ${message}\033[0m\n";
 }
