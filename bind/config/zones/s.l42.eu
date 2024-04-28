@@ -9,7 +9,6 @@
 	60		; Negative Cache TTL
 )
 @		IN	NS	dns.l42.eu.
-xwing	IN	A		152.37.104.10
 xwing	IN	AAAA 	2a01:4b00:8598:5a00:fb13:edf3:a4ec:1319
 salvare	IN	AAAA	2a01:4b00:8598:5a00:b86:3ceb:9c87:dfb7
 avalon	IN	A		178.32.218.44
