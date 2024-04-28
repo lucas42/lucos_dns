@@ -20,5 +20,5 @@ zone "tfluke.uk" {
 
 zone "s.l42.eu" {
         type master;
-        file "/etc/bind/dynamic/s.l42.eu";
+        file "/etc/bind/master/s.l42.eu";
 };

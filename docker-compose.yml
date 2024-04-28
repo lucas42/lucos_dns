@@ -1,19 +1,5 @@
 version: '3'
 services:
-  updater:
-    build: ./updater
-    container_name: dnsupdater
-    ports:
-      - "8012:8012"
-    environment:
-      - ADMINEMAIL
-      - APIKEY
-      - ROUTERIP
-    volumes:
-      - "dynamicconfig:/etc/bind/dynamic"
-    image: lucas42/lucos_dns_updater
-    restart: always
-
   bind:
     build: ./bind
     container_name: bind
@@ -21,10 +7,5 @@ services:
       - "53:53"
       - "53:53/udp"
       - "953:953"
-    volumes:
-      - "dynamicconfig:/etc/bind/dynamic"
     image: lucas42/lucos_dns_bind
     restart: always
-
-volumes:
-  dynamicconfig:
