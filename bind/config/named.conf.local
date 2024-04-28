@@ -1,24 +1,24 @@
 zone "lukeblaney.co.uk" {
-        type master;
-        file "/etc/bind/master/lukeblaney.co.uk";
+        type primary;
+        file "/etc/bind/zones/lukeblaney.co.uk";
 };
 
 zone "l42.eu" {
-        type master;
-        file "/etc/bind/master/l42.eu";
+        type primary;
+        file "/etc/bind/zones/l42.eu";
 };
 
 zone "rowanblaney.co.uk" {
-        type master;
-        file "/etc/bind/master/rowanblaney.co.uk";
+        type primary;
+        file "/etc/bind/zones/rowanblaney.co.uk";
 };
 
 zone "tfluke.uk" {
-        type master;
-        file "/etc/bind/master/tfluke.uk";
+        type primary;
+        file "/etc/bind/zones/tfluke.uk";
 };
 
 zone "s.l42.eu" {
-        type master;
-        file "/etc/bind/master/s.l42.eu";
+        type primary;
+        file "/etc/bind/zones/s.l42.eu";
 };
