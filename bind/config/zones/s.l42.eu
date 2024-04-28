@@ -1,20 +1,14 @@
 ;
 ; BIND data file for lucOS servers
-; NB: This file is modified automatically by lucOS
 ;
-@       IN      SOA     s.l42.eu. bind.lukeblaney.co.uk. (
-1714311815	; Serial
-604800 		; Refresh
-86400 		; Retry
-2419200		; Expire
-60 )		; Negative Cache TTL
-;
-@       IN      NS      dns.l42.eu.
-teltak	IN	A	195.99.62.152
+@		IN	SOA	s.l42.eu. bind.lukeblaney.co.uk. (
+	1		; Serial
+	604800	; Refresh
+	86400	; Retry
+	2419200	; Expire
+	60		; Negative Cache TTL
+)
+@		IN	NS	dns.l42.eu.
 xwing	IN	A	152.37.104.10
-interceptor	IN	A	51.6.191.234
 salvare	IN	A	152.37.104.10
-cloud9	IN	A	195.99.62.190
-prometheus	IN	A	212.110.189.17
-valen	IN	A	91.121.122.183
 avalon	IN	A	178.32.218.44
