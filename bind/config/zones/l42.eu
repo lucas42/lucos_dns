@@ -25,8 +25,6 @@ seinn             IN      CNAME   avalon.s
 media-api         IN      CNAME   avalon.s
 phys              IN      CNAME   avalon.s
 monitoring        IN      CNAME   avalon.s
-xwing.file-sync   IN      CNAME   xwing.s
-avalon.file-sync  IN      CNAME   avalon.s
 loganne           IN      CNAME   avalon.s
 media-metadata    IN      CNAME   avalon.s
 mail              IN      CNAME   avalon.s
