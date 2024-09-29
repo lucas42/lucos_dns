@@ -1,5 +1,5 @@
 @       IN      SOA     l42.eu. bind.lukeblaney.co.uk. (
-                             51         ; Serial
+                             52         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -34,6 +34,7 @@ media-weighting   IN      CNAME   avalon.s
 schedule-tracker  IN      CNAME   avalon.s
 creds             IN      CNAME   avalon.s
 scenes            IN      CNAME   avalon.s
+backups           IN      CNAME   avalon.s
 @                 IN      TXT     "v=spf1 a:mail.l42.eu include:_spf.google.com ~all"
 _dmarc            IN      TXT     "v=DMARC1; p=quarantine; rua=mailto:postmaster@l42.eu; ruf=mailto:postmaster@l42.eu; sp=quarantine; ri=3600"
 
