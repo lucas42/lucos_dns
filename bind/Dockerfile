@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.21.1
 
 RUN apk --update add bind bind-tools
 
