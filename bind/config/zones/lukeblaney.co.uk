@@ -1,5 +1,5 @@
 @       IN      SOA     lukeblaney.co.uk. bind.lukeblaney.co.uk. (
-                             16         ; Serial
+                             17         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -19,7 +19,6 @@
 gmail._domainkey IN TXT "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnS5XP4wNlqQsAZ5SS+r3DBwTwBi8Kg/Ei+kwqS/SpAlVAsEuOvPA4IncRWPSihLrAOWDxYWcSMiV4Ucr1Xaa0bE8O6JTqvXe0xAArNThhd3FEI9fWMgiV7O9QM4J82ETiJgYHKLXAYgle+" "CQL0dJMmNPzLzlGNquFLNkGHWl9DDWvXeC1vSlxB8tZ5XductqOxWlnMuGlizwgTrNYhRC+UL6REIXw5GOWl4aT2y2keyg3f4TvJoB/NqWw20kBWfG8E+EzcItLFbPk3obnDxUTJs/3ZA2LS1CSzLPRcOvqU8sFAiU7F+HgmqTJ8AYApuHKvaDmGF0i4jfbaanEDriJQIDAQAB"
 
 blog    IN      A       66.6.44.4
-id      IN      CNAME   www.myopenid.com.
 mail    IN      CNAME   ghs.google.com.
 docs    IN      CNAME   ghs.google.com.
 cal     IN      CNAME   ghs.google.com.
