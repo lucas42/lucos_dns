@@ -2,7 +2,7 @@
 ; BIND data file for lucOS servers
 ;
 @		IN	SOA	s.l42.eu. bind.lukeblaney.co.uk. (
-	7		; Serial
+	8		; Serial
 	604800	; Refresh
 	86400	; Retry
 	2419200	; Expire
@@ -10,9 +10,9 @@
 )
 @					IN	NS		dns.l42.eu.
 avalon				IN	A		178.32.218.44
-xwing				IN	AAAA	2a01:4b00:8598:5a00:47ff:b6c6:447f:674
+xwing				IN	AAAA	2a01:4b00:8598:5a00:b078:bfe3:33b0:f6c1
 xwing				IN	A		152.37.104.10
-salvare				IN	AAAA	2a01:4b00:8598:5a00:b86:3ceb:9c87:dfb7
+salvare				IN	AAAA	2a01:4b00:8598:5a00:f669:f6da:e174:624b
 virgon-express		IN	AAAA	2a01:4b00:8598:5a00:9c88:f9a1:bed1:4df
 
 ; Legacy ipv4 route to xwing & salvare for deploys, because circleCI doesn't support ipv6
