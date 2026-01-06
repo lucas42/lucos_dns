@@ -2,7 +2,7 @@
 ; BIND data file for lucOS servers
 ;
 @		IN	SOA	s.l42.eu. bind.lukeblaney.co.uk. (
-	8		; Serial
+	9		; Serial
 	604800	; Refresh
 	86400	; Retry
 	2419200	; Expire
@@ -10,7 +10,7 @@
 )
 @					IN	NS		dns.l42.eu.
 avalon				IN	A		178.32.218.44
-xwing				IN	AAAA	2a01:4b00:8598:5a00:b078:bfe3:33b0:f6c1
+xwing				IN	AAAA	2a01:4b00:8598:5a00:ba27:ebff:fe83:e1ee
 xwing				IN	A		152.37.104.10
 salvare				IN	AAAA	2a01:4b00:8598:5a00:f669:f6da:e174:624b
 virgon-express		IN	AAAA	2a01:4b00:8598:5a00:9c88:f9a1:bed1:4df
