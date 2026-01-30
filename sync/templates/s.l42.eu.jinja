@@ -1,0 +1,18 @@
+;
+; BIND data file for lucOS servers
+;
+@		IN	SOA	s.l42.eu. bind.lukeblaney.co.uk. (
+	{{ '{:8}'.format(serial) }}; Serial
+	604800  ; Refresh
+	86400   ; Retry
+	2419200 ; Expire
+	60      ; Negative Cache TTL
+)
+{{ '{:20}'.format('@') }} IN NS      dns.l42.eu.
+{% for host in hosts -%}
+	{% if host.ipv4 +%}{{ '{:20}'.format(host.id) }} IN A       {{ host.ipv4 }}{{ "\n" }}{% endif %}
+	{% if host.ipv6 +%}{{ '{:20}'.format(host.id) }} IN AAAA    {{ host.ipv6 }}{{ "\n" }}{% endif %}
+	{# Legacy ipv4 route to xwing & salvare for deploys, because circleCI doesn't support ipv6 
+	Keeping them on separate domains to v6 because the port config is very different for both #}
+	{% if host.ipv4_nat +%}{{ '{:20}'.format(host.id+'-v4') }} IN A       {{ '{:40}'.format(host.ipv4_nat) }}; For networks which don't support ipv6{{ "\n" }}{% endif %}
+{% endfor %}

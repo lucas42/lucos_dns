@@ -8,3 +8,20 @@ services:
       - "953:953"
     image: lucas42/lucos_dns_bind
     restart: always
+    volumes:
+      - "generatedzones:/etc/bind/generated-zones/"
+  sync:
+    build: ./sync
+    container_name: lucos_dns_sync
+    image: lucas42/lucos_dns_sync
+    restart: always
+    environment:
+      - SYSTEM=lucos_dns_sync
+      - LOGANNE_ENDPOINT
+      - SCHEDULE_TRACKER_ENDPOINT
+      - ZONES_PATH=/etc/bind/generated-zones/
+    volumes:
+      - "generatedzones:/etc/bind/generated-zones/"
+
+volumes:
+  generatedzones:

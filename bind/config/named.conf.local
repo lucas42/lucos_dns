@@ -5,7 +5,7 @@ zone "lukeblaney.co.uk" {
 
 zone "l42.eu" {
         type primary;
-        file "/etc/bind/zones/l42.eu";
+        file "/etc/bind/generated-zones/l42.eu";
 };
 
 zone "rowanblaney.co.uk" {
@@ -20,5 +20,5 @@ zone "tfluke.uk" {
 
 zone "s.l42.eu" {
         type primary;
-        file "/etc/bind/zones/s.l42.eu";
+        file "/etc/bind/generated-zones/s.l42.eu";
 };
