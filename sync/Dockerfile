@@ -1,4 +1,4 @@
-FROM lucas42/lucos_scheduled_scripts
+FROM lucas42/lucos_scheduled_scripts:1.0.0
 
 RUN apk --update add bind # Needed for rndc package (bind server itself has it own container)
 COPY rndc.conf /etc/bind/
