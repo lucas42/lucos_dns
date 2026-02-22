@@ -2,7 +2,7 @@
 DNS server & configuration for lucos services.
 
 ## Running
-Uses docker-compose:
+Uses docker compose:
 
 `docker compose up -d`
 
