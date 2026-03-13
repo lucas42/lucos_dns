@@ -10,6 +10,12 @@ services:
     restart: always
     volumes:
       - "generatedzones:/etc/bind/generated-zones/"
+    healthcheck:
+      test: ["CMD-SHELL", "dig @127.0.0.1 localhost +short > /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
   sync:
     build: ./sync
     container_name: lucos_dns_sync
@@ -22,6 +28,12 @@ services:
       - ZONES_PATH=/etc/bind/generated-zones/
     volumes:
       - "generatedzones:/etc/bind/generated-zones/"
+    healthcheck:
+      test: ["CMD-SHELL", "ps | grep -q '[c]rond'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
 volumes:
   generatedzones:
