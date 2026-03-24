@@ -14,7 +14,7 @@ try:
 except KeyError:
 	sys.exit("\033[91mZONES_PATH environment variable not set - should be the path of a volume to place generated zonefiles in\033[0m")
 
-CONFIGY_ENDPOINT = "https://configy.l42.eu"
+CONFIGY_ENDPOINT = os.environ.get("CONFIGY_ENDPOINT", "https://configy.l42.eu")
 
 session = requests.Session()
 session.headers.update({
