@@ -25,6 +25,7 @@ services:
       - SYSTEM=lucos_dns_sync
       - LOGANNE_ENDPOINT
       - SCHEDULE_TRACKER_ENDPOINT
+      - CONFIGY_ENDPOINT
       - ZONES_PATH=/etc/bind/generated-zones/
     volumes:
       - "generatedzones:/etc/bind/generated-zones/"
