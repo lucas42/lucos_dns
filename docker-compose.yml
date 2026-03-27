@@ -1,7 +1,7 @@
 services:
   bind:
     build: ./bind
-    container_name: bind
+    container_name: lucos_dns_bind
     ports:
       - "53:53"
       - "53:53/udp"
