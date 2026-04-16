@@ -1,4 +1,6 @@
 FROM alpine:3.23.3
+ARG VERSION
+ENV VERSION=$VERSION
 
 RUN apk --update add bind bind-tools
 
