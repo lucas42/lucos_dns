@@ -6,7 +6,7 @@ services:
       - "53:53"
       - "53:53/udp"
       - "953:953"
-    image: lucas42/lucos_dns_bind
+    image: lucas42/lucos_dns_bind:${VERSION:-latest}
     restart: always
     volumes:
       - "generatedzones:/etc/bind/generated-zones/"
@@ -19,7 +19,7 @@ services:
   sync:
     build: ./sync
     container_name: lucos_dns_sync
-    image: lucas42/lucos_dns_sync
+    image: lucas42/lucos_dns_sync:${VERSION:-latest}
     restart: always
     environment:
       - SYSTEM=lucos_dns_sync
