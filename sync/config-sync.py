@@ -33,9 +33,13 @@ def fetch_from_configy(path):
 	response.raise_for_status()
 	return response.json()
 
-def get_hosts_zone(hosts):
-	template = jinja_env.get_template("s.l42.eu.jinja")
-	return template.render(hosts=hosts, serial=int(time.time()))
+def get_hosts_zone(hosts, zone):
+	in_zone = [
+		h for h in hosts
+		if h.get('domain') == zone or (h.get('domain') or '').endswith('.' + zone)
+	]
+	template = jinja_env.get_template(f"{zone}.jinja")
+	return template.render(hosts=in_zone, serial=int(time.time()))
 
 def get_systems_zone(domain, host_domain_lookup):
 	raw_systems = fetch_from_configy("/systems/subdomain/%s" % domain)
@@ -95,7 +99,7 @@ if __name__ == "__main__":
 		for host in hosts:
 			host_domain_lookup[host['id']] = host
 		config_by_zone = {}
-		config_by_zone['s.l42.eu'] = get_hosts_zone(hosts)
+		config_by_zone['s.l42.eu'] = get_hosts_zone(hosts, 's.l42.eu')
 		config_by_zone['l42.eu'] = get_systems_zone('l42.eu', host_domain_lookup)
 		for zone, content in config_by_zone.items():
 			update_zone_config(zone, content)
