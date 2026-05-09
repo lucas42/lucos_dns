@@ -46,15 +46,15 @@ def get_systems_zone(domain, host_domain_lookup):
 	cname_records = []
 	a_records = []
 	for system in raw_systems:
-		subdomain = system['domain']
+		subdomain = system['subdomain']
 		host = system['hosts'][0]
 		host_domain = host_domain_lookup[host]['domain']
-		if subdomain == domain: # The root record can't be a CNAME
+		if not subdomain: # The root record can't be a CNAME
 			a_records.append({
 				"from": "@",
 				"to": host_domain_lookup[host]['ipv4'],
 			})
-		elif subdomain == "dns."+domain: # Don't CNAME DNS records to avoid too many extra lookups
+		elif subdomain == "dns": # Don't CNAME DNS records to avoid too many extra lookups
 			a_records.append({
 				"from": "dns",
 				"to": host_domain_lookup[host]['ipv4'],
@@ -65,7 +65,7 @@ def get_systems_zone(domain, host_domain_lookup):
 			})
 		else:
 			cname_records.append({
-				"from": subdomain.removesuffix("."+domain),
+				"from": subdomain,
 				"to": host_domain.removesuffix("."+domain),
 			})
 	template = jinja_env.get_template("%s.jinja" % domain)
