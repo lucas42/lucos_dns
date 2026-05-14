@@ -18,7 +18,7 @@ CONFIGY_ENDPOINT = os.environ.get("CONFIGY_ENDPOINT", "https://configy.l42.eu")
 
 session = requests.Session()
 session.headers.update({
-	"User-Agent": SYSTEM,
+	"User-Agent": "lucos_dns_sync",
 	"Accept": "application/json",
 })
 
@@ -103,9 +103,9 @@ if __name__ == "__main__":
 		config_by_zone['l42.eu'] = get_systems_zone('l42.eu', host_domain_lookup)
 		for zone, content in config_by_zone.items():
 			update_zone_config(zone, content)
-		updateScheduleTracker(success=True, frequency=(15 * 60))
+		updateScheduleTracker(success=True, job_name="config-sync", frequency=(15 * 60))
 	except Exception as e:
 		error_message = f"Sync failure: {e}"
-		updateScheduleTracker(success=False, message=error_message, frequency=(15 * 60))
+		updateScheduleTracker(success=False, job_name="config-sync", message=error_message, frequency=(15 * 60))
 		print(error_message, flush=True)
 		raise e

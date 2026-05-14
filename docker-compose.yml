@@ -22,7 +22,7 @@ services:
     image: lucas42/lucos_dns_sync:${VERSION:-latest}
     restart: always
     environment:
-      - SYSTEM=lucos_dns_sync
+      - SYSTEM
       - LOGANNE_ENDPOINT
       - SCHEDULE_TRACKER_ENDPOINT
       - CONFIGY_ENDPOINT
