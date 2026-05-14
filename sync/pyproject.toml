@@ -5,4 +5,5 @@ dependencies = [
 	"requests>=2.32.5",
 	"Jinja2>=3.1.6",
 	"lucos-scheduled-scripts @ file:///opt/lucos_scheduled_scripts",
+	"lucos-schedule-tracker-pythonclient==2.0.0",
 ]
