@@ -5,7 +5,6 @@ services:
     ports:
       - "53:53"
       - "53:53/udp"
-      - "953:953"
     image: lucas42/lucos_dns_bind:${VERSION:-latest}
     restart: always
     volumes:
