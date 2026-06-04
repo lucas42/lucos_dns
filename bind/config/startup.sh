@@ -119,7 +119,8 @@ zone "s.l42.eu" {
 };
 ENDCONF
 
-    echo "Named configured as primary (allow-transfer: ${TSIG_SECRET:+TSIG-restricted}${TSIG_SECRET:-none})"
+    ALLOW_LABEL="${TSIG_SECRET:+TSIG-restricted}"
+    echo "Named configured as primary (allow-transfer: ${ALLOW_LABEL:-none})"
 fi
 
 /usr/sbin/named -c /etc/bind/named.conf -g
