@@ -1,5 +1,5 @@
 @       IN      SOA     tfluke.uk. bind.lukeblaney.co.uk. (
-                             24         ; Serial
+                             25         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -8,6 +8,7 @@
 
 @       IN      A       178.32.218.44
 @       IN      NS      dns.l42.eu.
+@       IN      NS      dns2.l42.eu.
 app     IN      CNAME   tfluke.uk.
 www     IN      CNAME   tfluke.uk.
 @       IN      TXT     google-site-verification=xl893GILIJnKptsQRHkqBNfFQK8kVcOJVR9bitHxMb8

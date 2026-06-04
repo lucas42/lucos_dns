@@ -45,6 +45,7 @@ def get_systems_zone(domain, host_domain_lookup):
 	raw_systems = fetch_from_configy("/systems/subdomain/%s" % domain)
 	cname_records = []
 	a_records = []
+	aaaa_records = []
 	for system in raw_systems:
 		subdomain = system['subdomain']
 		host = system['hosts'][0]
@@ -59,17 +60,26 @@ def get_systems_zone(domain, host_domain_lookup):
 				"from": "dns",
 				"to": host_domain_lookup[host]['ipv4'],
 			})
-			a_records.append({ # Also add a secondary DNS record
-				"from": "dns2",
-				"to": host_domain_lookup[host]['ipv4'],
-			})
+			# Secondary DNS on xwing - add A and AAAA glue records
+			if 'xwing' in host_domain_lookup:
+				xwing = host_domain_lookup['xwing']
+				if xwing.get('ipv4'):
+					a_records.append({
+						"from": "dns2",
+						"to": xwing['ipv4'],
+					})
+				if xwing.get('ipv6'):
+					aaaa_records.append({
+						"from": "dns2",
+						"to": xwing['ipv6'],
+					})
 		else:
 			cname_records.append({
 				"from": subdomain,
 				"to": host_domain.removesuffix("."+domain),
 			})
 	template = jinja_env.get_template("%s.jinja" % domain)
-	return template.render(a_records=a_records, cname_records=cname_records, serial=int(time.time()))
+	return template.render(a_records=a_records, aaaa_records=aaaa_records, cname_records=cname_records, serial=int(time.time()))
 
 def strip_serial_lines(content):
 	return "\n".join(

@@ -7,6 +7,9 @@ services:
       - "53:53/udp"
     image: lucas42/lucos_dns_bind:${VERSION:-latest}
     restart: always
+    environment:
+      - DNS_MODE
+      - TSIG_SECRET
     volumes:
       - "generatedzones:/etc/bind/generated-zones/"
     healthcheck:
@@ -20,6 +23,7 @@ services:
     container_name: lucos_dns_sync
     image: lucas42/lucos_dns_sync:${VERSION:-latest}
     restart: always
+    profiles: [primary]
     environment:
       - SYSTEM
       - LOGANNE_ENDPOINT

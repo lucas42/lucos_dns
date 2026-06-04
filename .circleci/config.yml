@@ -15,3 +15,11 @@ workflows:
             branches:
               only:
                 - main
+      - lucos/deploy-xwing:
+          serial-group: deploy-xwing
+          requires:
+            - lucos/build
+          filters:
+            branches:
+              only:
+                - main
