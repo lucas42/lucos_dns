@@ -144,7 +144,7 @@ class TestUpdateZoneConfig:
         assert len(rsps.calls) == 1
         body = json.loads(rsps.calls[0].request.body)
         assert body["type"] == "dns_config_changed"
-        assert body["level"] == "routine"
+        assert body["level"] == "notable"
         assert "l42.eu" in body["humanReadable"]
         assert (tmp_path / "l42.eu").exists()
 

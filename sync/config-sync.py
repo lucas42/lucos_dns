@@ -90,7 +90,7 @@ def update_zone_config(zone, new_content):
 	zonefile_path.write_text(new_content)
 	print("DNS Config changed for zone %s, reloading bind"%zone, flush=True)
 	subprocess.run(["rndc", "reload", zone]) 
-	updateLoganne(type="dns_config_changed", humanReadable="DNS config updated for zone %s"%zone, level="routine")
+	updateLoganne(type="dns_config_changed", humanReadable="DNS config updated for zone %s"%zone, level="notable")
 
 if __name__ == "__main__":
 	try:
