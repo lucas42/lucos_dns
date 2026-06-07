@@ -7,3 +7,9 @@ dependencies = [
 	"lucos-loganne-pythonclient>=2.0.0",
 	"lucos-schedule-tracker-pythonclient>=2.0.0",
 ]
+
+[project.optional-dependencies]
+test = [
+	"pytest>=8.0.0",
+	"responses>=0.25.0",
+]

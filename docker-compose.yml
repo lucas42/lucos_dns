@@ -35,28 +35,5 @@ services:
       retries: 3
       start_period: 15s
 
-  # ADR-0011 real-transport test: runs config-sync.py once against real configy/loganne/
-  # schedule_tracker endpoints. rndc will fail (no bind server) but subprocess.run has no
-  # check=True so the failure is silent — the schedule_tracker emit path is still exercised.
-  # Run with: docker compose --profile test run --rm test
-  # Requires test credentials in lucos_creds (see PR for provisioning steps).
-  test:
-    build: ./sync
-    container_name: lucos_dns_sync_test
-    image: lucas42/lucos_dns_sync:${VERSION:-latest}
-    command: ["python", "/app/config-sync.py"]
-    environment:
-      - SYSTEM
-      - LOGANNE_ENDPOINT
-      - SCHEDULE_TRACKER_ENDPOINT
-      - CONFIGY_ENDPOINT
-      - ZONES_PATH=/test-zones/
-    volumes:
-      - "test-zones:/test-zones/"
-    profiles:
-      - test
-
 volumes:
   generatedzones:
-  # test-zones is only used by the test profile and does not need backup coverage
-  test-zones:
