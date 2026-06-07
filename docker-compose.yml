@@ -7,6 +7,8 @@ services:
       - "53:53/udp"
     image: lucas42/lucos_dns_bind:${VERSION:-latest}
     restart: always
+    environment:
+      - TSIG_SECRET
     volumes:
       - "generatedzones:/etc/bind/generated-zones/"
     healthcheck:

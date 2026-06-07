@@ -61,6 +61,12 @@ FIXTURE_SYSTEMS = [
     {"subdomain": "",       "hosts": ["salvare"]},
 ]
 
+# Systems fixture that also includes a dns2 entry on a distinct host (salvare),
+# used to verify dns2 glue is derived from its own system data, not the dns host.
+FIXTURE_SYSTEMS_WITH_DNS2 = FIXTURE_SYSTEMS + [
+    {"subdomain": "dns2", "hosts": ["salvare"]},
+]
+
 # ---------------------------------------------------------------------------
 # get_hosts_zone — pure function (no HTTP stubs required)
 # ---------------------------------------------------------------------------
@@ -116,8 +122,40 @@ class TestGetSystemsZone:
     def test_a_records_for_dns_subdomain(self):
         rsps.add(rsps.GET, "http://fake-configy/systems/subdomain/l42.eu", json=FIXTURE_SYSTEMS)
         output = cs.strip_serial_lines(cs.get_systems_zone("l42.eu", FIXTURE_HOST_LOOKUP))
-        # dns + dns2 → A records pointing at xwing's IP
+        # dns → A record pointing at xwing's IP
         assert "1.2.3.4" in output
+
+    @rsps.activate
+    def test_aaaa_record_for_dns_subdomain(self):
+        rsps.add(rsps.GET, "http://fake-configy/systems/subdomain/l42.eu", json=FIXTURE_SYSTEMS)
+        output = cs.strip_serial_lines(cs.get_systems_zone("l42.eu", FIXTURE_HOST_LOOKUP))
+        # dns → AAAA record because xwing has ipv6
+        assert "2001:db8::1" in output
+
+    @rsps.activate
+    def test_a_record_for_dns2_from_own_host(self):
+        rsps.add(rsps.GET, "http://fake-configy/systems/subdomain/l42.eu", json=FIXTURE_SYSTEMS_WITH_DNS2)
+        output = cs.strip_serial_lines(cs.get_systems_zone("l42.eu", FIXTURE_HOST_LOOKUP))
+        # dns2 is on salvare (5.6.7.8) — must NOT inherit dns's host (xwing, 1.2.3.4)
+        assert "dns2" in output
+        assert "5.6.7.8" in output
+
+    @rsps.activate
+    def test_dns2_does_not_inherit_dns_host_ip(self):
+        # Arrange: dns on xwing (1.2.3.4), dns2 on salvare (5.6.7.8)
+        rsps.add(rsps.GET, "http://fake-configy/systems/subdomain/l42.eu", json=FIXTURE_SYSTEMS_WITH_DNS2)
+        output = cs.strip_serial_lines(cs.get_systems_zone("l42.eu", FIXTURE_HOST_LOOKUP))
+        # Count occurrences: xwing's IP should appear exactly once (for dns), not twice
+        assert output.count("1.2.3.4") == 1
+
+    @rsps.activate
+    def test_no_aaaa_for_dns2_when_host_has_no_ipv6(self):
+        rsps.add(rsps.GET, "http://fake-configy/systems/subdomain/l42.eu", json=FIXTURE_SYSTEMS_WITH_DNS2)
+        output = cs.strip_serial_lines(cs.get_systems_zone("l42.eu", FIXTURE_HOST_LOOKUP))
+        # salvare has no ipv6 in the fixture — dns2 AAAA must not appear
+        # The only AAAA in output should be for dns (xwing's IPv6)
+        aaaa_lines = [line for line in output.splitlines() if "AAAA" in line and "dns2" in line]
+        assert aaaa_lines == []
 
     @rsps.activate
     def test_a_record_for_root_subdomain(self):
