@@ -16,7 +16,7 @@ fi
 TSIG_KEYFILE=/etc/bind/generated-zones/tsig.key
 if [ -n "$TSIG_SECRET" ]; then
     cat > $TSIG_KEYFILE << EOF
-key "tsig-transfer" {
+key "lucos-tsig" {
     algorithm hmac-sha256;
     secret "$TSIG_SECRET";
 };
@@ -44,7 +44,7 @@ write_zone() {
     echo "        type primary;"
     echo "        file \"$2\";"
     if [ -n "$TSIG_SECRET" ]; then
-        echo "        allow-transfer { key \"tsig-transfer\"; };"
+        echo "        allow-transfer { key \"lucos-tsig\"; };"
         echo "        also-notify { $SECONDARY_IPV4; $SECONDARY_IPV6; };"
     else
         echo "        allow-transfer { none; };"
