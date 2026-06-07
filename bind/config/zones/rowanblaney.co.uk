@@ -1,6 +1,6 @@
 $TTL 30
 @       IN      SOA     rowanblaney.co.uk. bind.lukeblaney.co.uk. (
-                             15         ; Serial
+                             16         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
@@ -8,6 +8,7 @@ $TTL 30
 ;
 
 @       IN      NS      dns.l42.eu.
+@       IN      NS      dns2.l42.eu.
 home    IN      CNAME   ghs.google.com.
 boat    IN      CNAME   ghs.google.com.
 cal     IN      CNAME   ghs.google.com.

@@ -10,6 +10,7 @@ $TTL 300
 	60      ; Negative Cache TTL
 )
 {{ '{:20}'.format('@') }} IN NS      dns.l42.eu.
+{{ '{:20}'.format('@') }} IN NS      dns2.l42.eu.
 {% for host in hosts -%}
 	{% if host.ipv4 +%}{{ '{:20}'.format(host.id) }} IN A       {{ host.ipv4 }}{{ "\n" }}{% endif %}
 	{% if host.ipv6 +%}{{ '{:20}'.format(host.id) }} IN AAAA    {{ host.ipv6 }}{{ "\n" }}{% endif %}
