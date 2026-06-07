@@ -1,8 +1,5 @@
 FROM python:3.14.2-alpine
 
-ARG VERSION
-ENV VERSION=$VERSION
-
 # Install supercronic v0.2.46 — a container-native cron runner that propagates the
 # container environment to jobs natively, logs stdout/stderr to docker logs, and
 # uses standard crontab syntax.
@@ -30,6 +27,11 @@ COPY rndc.conf /etc/bind/rndc.conf
 WORKDIR /app
 COPY pyproject.toml .
 RUN pip install --no-cache-dir .
+
+# VERSION must come after the expensive layers above so a new deploy tag does not
+# bust the supercronic/apk/pip cache.
+ARG VERSION
+ENV VERSION=$VERSION
 
 COPY crontab /crontab
 COPY config-sync.py .
