@@ -33,11 +33,7 @@ fi
 #
 # xwing's addresses (from configy):
 SECONDARY_IPV4=152.37.104.10
-# Note: xwing's IPv6 (2a01:4b00:8598:5a00:ba27:ebff:fe83:e1ee) is NOT included in
-# also-notify because the lucos_dns_bind container runs on a Docker bridge network
-# with no IPv6 routing — NOTIFY to IPv6 always fails with "network unreachable".
-# IPv4 NOTIFY is sufficient; BIND secondary falls back to SOA polling for any missed
-# NOTIFYs. See lucos_dns#105.
+SECONDARY_IPV6=2a01:4b00:8598:5a00:ba27:ebff:fe83:e1ee
 
 NAMED_CONF_LOCAL=/etc/bind/generated-zones/named.conf.local
 
@@ -49,7 +45,7 @@ write_zone() {
     echo "        file \"$2\";"
     if [ -n "$TSIG_SECRET" ]; then
         echo "        allow-transfer { key \"lucos-tsig\"; };"
-        echo "        also-notify { $SECONDARY_IPV4; };"
+        echo "        also-notify { $SECONDARY_IPV4; $SECONDARY_IPV6; };"
     else
         echo "        allow-transfer { none; };"
     fi

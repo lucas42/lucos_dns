@@ -39,3 +39,10 @@ services:
 
 volumes:
   generatedzones:
+
+networks:
+  default:
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: fd00:2::/64
