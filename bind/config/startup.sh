@@ -61,5 +61,41 @@ write_zone() {
     write_zone "s.l42.eu"         "/etc/bind/generated-zones/s.l42.eu"
 } > $NAMED_CONF_LOCAL
 
+# Validate generated zone files before starting named.
+# A broken generated zone (e.g. stale file from an older generator) will cause
+# named to silently drop the entire zone on startup, with no in-memory fallback.
+# If a zone fails validation:
+#   - restore from the .last-known-good backup written by config-sync on each
+#     successful install, if one exists; or
+#   - remove the bad file so named fails with a clean "file not found" rather
+#     than a parse error that drops the apex zone.
+# Static zones (lukeblaney.co.uk, rowanblaney.co.uk, tfluke.uk) are checked into
+# git and are not validated here — only the generated zones can be stale/corrupted.
+validate_or_restore_generated_zone() {
+    zone="$1"
+    zonefile="$2"
+    backupfile="${zonefile}.last-known-good"
+
+    [ -f "$zonefile" ] || return 0  # Not yet generated — skip
+
+    checkzone_output=$(named-checkzone "$zone" "$zonefile" 2>&1)
+    checkzone_status=$?
+    if [ "$checkzone_status" -eq 0 ]; then
+        return 0  # Zone is valid — nothing to do
+    fi
+
+    echo "WARN: Generated zone file for $zone failed validation:"
+    echo "$checkzone_output"
+    if [ -f "$backupfile" ]; then
+        echo "INFO: Restoring $zone from last-known-good backup"
+        cp "$backupfile" "$zonefile"
+    else
+        echo "ERROR: No last-known-good backup for $zone — removing invalid zone file"
+        rm "$zonefile"
+    fi
+}
+
+validate_or_restore_generated_zone "l42.eu"   "/etc/bind/generated-zones/l42.eu"
+validate_or_restore_generated_zone "s.l42.eu" "/etc/bind/generated-zones/s.l42.eu"
 
 /usr/sbin/named -c /etc/bind/named.conf -g

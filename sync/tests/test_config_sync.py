@@ -9,6 +9,7 @@ Reference: https://github.com/lucas42/lucos/blob/main/docs/adr/0011-consumer-tes
 """
 import json
 import os
+import subprocess
 import importlib.util
 from pathlib import Path
 
@@ -166,6 +167,44 @@ class TestGetSystemsZone:
 
 
 # ---------------------------------------------------------------------------
+# validate_zone — unit tests using mocked subprocess
+# (named-checkzone is not available in the CI test container)
+# ---------------------------------------------------------------------------
+
+
+class TestValidateZone:
+    def test_returns_true_for_valid_zone(self, monkeypatch):
+        def fake_run(args, **kwargs):
+            return subprocess.CompletedProcess(args, returncode=0, stdout="OK\n", stderr="")
+        monkeypatch.setattr(cs.subprocess, "run", fake_run)
+        valid, error = cs.validate_zone("l42.eu", "$TTL 300\n@ IN SOA l42.eu. bind.l42.eu. (1 604800 86400 2419200 60)\n")
+        assert valid is True
+        assert error is None
+
+    def test_returns_false_for_invalid_zone(self, monkeypatch):
+        def fake_run(args, **kwargs):
+            return subprocess.CompletedProcess(args, returncode=1, stdout="", stderr="dns2.l42.eu: CNAME and other data\n")
+        monkeypatch.setattr(cs.subprocess, "run", fake_run)
+        valid, error = cs.validate_zone("l42.eu", "broken zone content\n")
+        assert valid is False
+        assert "CNAME" in error
+
+    def test_uses_stderr_for_error_message(self, monkeypatch):
+        def fake_run(args, **kwargs):
+            return subprocess.CompletedProcess(args, returncode=1, stdout="", stderr="syntax error at line 5")
+        monkeypatch.setattr(cs.subprocess, "run", fake_run)
+        valid, error = cs.validate_zone("l42.eu", "bad\n")
+        assert "syntax error" in error
+
+    def test_falls_back_to_stdout_when_stderr_empty(self, monkeypatch):
+        def fake_run(args, **kwargs):
+            return subprocess.CompletedProcess(args, returncode=1, stdout="some stdout error", stderr="")
+        monkeypatch.setattr(cs.subprocess, "run", fake_run)
+        valid, error = cs.validate_zone("l42.eu", "bad\n")
+        assert "some stdout error" in error
+
+
+# ---------------------------------------------------------------------------
 # update_zone_config — exercises real loganne v2 client via stubbed transport
 # ---------------------------------------------------------------------------
 
@@ -176,6 +215,7 @@ class TestUpdateZoneConfig:
         rsps.add(rsps.POST, "http://fake-loganne/events", status=200)
         monkeypatch.setattr(cs, "ZONES_PATH", str(tmp_path) + "/")
         monkeypatch.setattr(cs.subprocess, "run", lambda *args, **kwargs: None)
+        monkeypatch.setattr(cs, "validate_zone", lambda zone, content: (True, None))
 
         cs.update_zone_config("l42.eu", "new content\n12345678; Serial")
 
@@ -196,6 +236,56 @@ class TestUpdateZoneConfig:
         cs.update_zone_config("l42.eu", "stable content\n22222222; Serial")
 
         assert len(rsps.calls) == 0
+
+    @rsps.activate
+    def test_last_known_good_backup_written_on_successful_update(self, tmp_path, monkeypatch):
+        rsps.add(rsps.POST, "http://fake-loganne/events", status=200)
+        monkeypatch.setattr(cs, "ZONES_PATH", str(tmp_path) + "/")
+        monkeypatch.setattr(cs.subprocess, "run", lambda *args, **kwargs: None)
+        monkeypatch.setattr(cs, "validate_zone", lambda zone, content: (True, None))
+
+        cs.update_zone_config("l42.eu", "new valid content\n12345678; Serial")
+
+        backup = tmp_path / "l42.eu.last-known-good"
+        assert backup.exists(), "last-known-good backup was not written on a valid update"
+        assert cs.strip_serial_lines(backup.read_text()) == cs.strip_serial_lines("new valid content\n12345678; Serial")
+
+    @rsps.activate
+    def test_validation_failure_leaves_existing_zone_untouched(self, tmp_path, monkeypatch):
+        rsps.add(rsps.POST, "http://fake-loganne/events", status=200)
+        monkeypatch.setattr(cs, "ZONES_PATH", str(tmp_path) + "/")
+        monkeypatch.setattr(cs, "validate_zone", lambda zone, content: (False, "CNAME and other data"))
+
+        (tmp_path / "l42.eu").write_text("existing good content\n11111111; Serial")
+
+        cs.update_zone_config("l42.eu", "new invalid content\n22222222; Serial")
+
+        assert (tmp_path / "l42.eu").read_text() == "existing good content\n11111111; Serial"
+
+    @rsps.activate
+    def test_validation_failure_emits_dns_zone_validation_failed_loganne_event(self, tmp_path, monkeypatch):
+        rsps.add(rsps.POST, "http://fake-loganne/events", status=200)
+        monkeypatch.setattr(cs, "ZONES_PATH", str(tmp_path) + "/")
+        monkeypatch.setattr(cs, "validate_zone", lambda zone, content: (False, "CNAME and other data"))
+
+        cs.update_zone_config("l42.eu", "new invalid content\n22222222; Serial")
+
+        assert len(rsps.calls) == 1
+        body = json.loads(rsps.calls[0].request.body)
+        assert body["type"] == "dns_zone_validation_failed"
+        assert body["level"] == "headline"
+        assert "l42.eu" in body["humanReadable"]
+
+    def test_validation_failure_does_not_call_rndc(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(cs, "ZONES_PATH", str(tmp_path) + "/")
+        monkeypatch.setattr(cs, "validate_zone", lambda zone, content: (False, "syntax error"))
+
+        rndc_calls = []
+        monkeypatch.setattr(cs.subprocess, "run", lambda args, **kwargs: rndc_calls.append(args))
+
+        cs.update_zone_config("l42.eu", "new invalid content\n22222222; Serial")
+
+        assert rndc_calls == [], "rndc reload must not be called when zone validation fails"
 
 
 # ---------------------------------------------------------------------------
