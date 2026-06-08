@@ -30,6 +30,7 @@ services:
       - ZONES_PATH=/etc/bind/generated-zones/
     volumes:
       - "generatedzones:/etc/bind/generated-zones/"
+      - "configy-sync-cache:/var/cache/lucos_dns_sync/"
     healthcheck:
       test: ["CMD-SHELL", "ps | grep -q '[s]upercronic'"]
       interval: 10s
@@ -39,6 +40,7 @@ services:
 
 volumes:
   generatedzones:
+  configy-sync-cache:
 
 networks:
   default:
