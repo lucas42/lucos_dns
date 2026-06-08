@@ -14,6 +14,7 @@ import importlib.util
 from pathlib import Path
 
 import pytest
+import requests
 import responses as rsps
 
 # Set required env vars BEFORE importing config-sync.
@@ -320,3 +321,86 @@ class TestUpdateScheduleTracker:
         body = json.loads(rsps.calls[0].request.body)
         assert body["status"] == "error"
         assert body["message"] == "Sync failure: connection refused"
+
+
+# ---------------------------------------------------------------------------
+# run_sync — cache fallback behaviour
+# ---------------------------------------------------------------------------
+
+
+class TestRunSync:
+    """Tests for the main sync loop — configy cache fallback behaviour."""
+
+    def test_cache_written_after_successful_fetch(self, tmp_path, monkeypatch):
+        """After a successful sync, the configy payload is persisted to the cache file."""
+        cache_file = tmp_path / "configy-cache.json"
+
+        monkeypatch.setattr(cs, "CACHE_PATH", cache_file)
+        monkeypatch.setattr(cs, "fetch_from_configy", lambda path: {
+            "/hosts": FIXTURE_HOSTS,
+            "/systems/subdomain/l42.eu": FIXTURE_SYSTEMS,
+        }[path])
+        monkeypatch.setattr(cs, "update_zone_config", lambda zone, content: None)
+        monkeypatch.setattr(cs, "updateScheduleTracker", lambda **kwargs: None)
+
+        cs.run_sync()
+
+        assert cache_file.exists(), "cache file was not written after a successful sync"
+        payload = json.loads(cache_file.read_text())
+        assert payload["/hosts"] == FIXTURE_HOSTS
+        assert payload["/systems/subdomain/l42.eu"] == FIXTURE_SYSTEMS
+
+    def test_cache_fallback_produces_valid_zone_output(self, tmp_path, monkeypatch):
+        """When configy is unreachable but a valid cache exists, zones are generated."""
+        cache_file = tmp_path / "configy-cache.json"
+        cache_file.write_text(json.dumps({
+            "/hosts": FIXTURE_HOSTS,
+            "/systems/subdomain/l42.eu": FIXTURE_SYSTEMS,
+        }))
+
+        def raise_connection_error(path):
+            raise requests.exceptions.ConnectionError("DNS resolution failed")
+
+        monkeypatch.setattr(cs, "CACHE_PATH", cache_file)
+        monkeypatch.setattr(cs, "ZONES_PATH", str(tmp_path) + "/")
+        monkeypatch.setattr(cs, "fetch_from_configy", raise_connection_error)
+        monkeypatch.setattr(cs, "updateLoganne", lambda **kwargs: None)
+        monkeypatch.setattr(cs, "updateScheduleTracker", lambda **kwargs: None)
+        monkeypatch.setattr(cs.subprocess, "run", lambda *a, **kw: None)
+        monkeypatch.setattr(cs, "validate_zone", lambda zone, content: (True, None))
+
+        cs.run_sync()  # Must not raise
+
+        assert (tmp_path / "l42.eu").exists(), "l42.eu zone file not written from cache"
+        assert (tmp_path / "s.l42.eu").exists(), "s.l42.eu zone file not written from cache"
+
+    def test_no_cache_raises_on_connection_error(self, tmp_path, monkeypatch):
+        """When configy is unreachable and no cache file exists, the error propagates."""
+        cache_file = tmp_path / "configy-cache.json"  # deliberately not created
+
+        def raise_connection_error(path):
+            raise requests.exceptions.ConnectionError("DNS resolution failed")
+
+        monkeypatch.setattr(cs, "CACHE_PATH", cache_file)
+        monkeypatch.setattr(cs, "fetch_from_configy", raise_connection_error)
+        monkeypatch.setattr(cs, "updateScheduleTracker", lambda **kwargs: None)
+
+        with pytest.raises(requests.exceptions.ConnectionError):
+            cs.run_sync()
+
+    @rsps.activate
+    def test_http_error_does_not_trigger_cache_fallback(self, tmp_path, monkeypatch):
+        """HTTP 4xx/5xx from configy raises and does not fall back to the cache."""
+        cache_file = tmp_path / "configy-cache.json"
+        cache_file.write_text(json.dumps({
+            "/hosts": FIXTURE_HOSTS,
+            "/systems/subdomain/l42.eu": FIXTURE_SYSTEMS,
+        }))
+
+        rsps.add(rsps.GET, "http://fake-configy/hosts", status=503)
+        rsps.add(rsps.POST, "http://fake-tracker/v2/report-status", status=200)
+
+        monkeypatch.setattr(cs, "CACHE_PATH", cache_file)
+
+        with pytest.raises(requests.exceptions.HTTPError):
+            cs.run_sync()
