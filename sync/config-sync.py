@@ -1,4 +1,4 @@
-import os, sys, time, subprocess
+import os, sys, time, subprocess, tempfile
 from pathlib import Path
 from loganne import updateLoganne
 from schedule_tracker import updateScheduleTracker
@@ -81,8 +81,32 @@ def strip_serial_lines(content):
 		if not line.rstrip().endswith("; Serial")
 	)
 
+def validate_zone(zone, content):
+	"""Validate zone content with named-checkzone.
+
+	Writes content to a temp file and runs named-checkzone against it so the
+	live zone file is never touched during validation.
+
+	Returns (True, None) if valid, (False, error_message) if invalid.
+	"""
+	with tempfile.NamedTemporaryFile(mode='w', suffix='.zone', delete=False) as f:
+		f.write(content)
+		tmp_path = f.name
+	try:
+		result = subprocess.run(
+			["named-checkzone", zone, tmp_path],
+			capture_output=True, text=True
+		)
+		if result.returncode != 0:
+			error = result.stderr.strip() or result.stdout.strip() or "named-checkzone returned non-zero exit code"
+			return False, error
+		return True, None
+	finally:
+		os.unlink(tmp_path)
+
 def update_zone_config(zone, new_content):
 	zonefile_path = Path(ZONES_PATH+zone)
+	backup_path = Path(ZONES_PATH+zone+".last-known-good")
 	try:
 		with zonefile_path.open("r") as zonefile:
 			existing_content = zonefile.read()
@@ -90,9 +114,18 @@ def update_zone_config(zone, new_content):
 		existing_content = ""
 	if strip_serial_lines(new_content) == strip_serial_lines(existing_content):
 		return
+
+	valid, error = validate_zone(zone, new_content)
+	if not valid:
+		error_msg = f"Zone validation failed for {zone}: {error}"
+		print(error_msg, flush=True)
+		updateLoganne(type="dns_zone_validation_failed", humanReadable=error_msg, level="headline")
+		return
+
 	zonefile_path.write_text(new_content)
+	backup_path.write_text(new_content)
 	print("DNS Config changed for zone %s, reloading bind"%zone, flush=True)
-	subprocess.run(["rndc", "reload", zone]) 
+	subprocess.run(["rndc", "reload", zone])
 	updateLoganne(type="dns_config_changed", humanReadable="DNS config updated for zone %s"%zone, level="notable")
 
 if __name__ == "__main__":
