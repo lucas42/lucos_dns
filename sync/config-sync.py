@@ -90,8 +90,8 @@ def validate_zone(zone, content):
 	Returns (True, None) if valid, (False, error_message) if invalid.
 	"""
 	with tempfile.NamedTemporaryFile(mode='w', suffix='.zone', delete=False) as f:
+		tmp_path = f.name  # assign before write so finally can always clean up
 		f.write(content)
-		tmp_path = f.name
 	try:
 		result = subprocess.run(
 			["named-checkzone", zone, tmp_path],

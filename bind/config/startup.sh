@@ -78,11 +78,14 @@ validate_or_restore_generated_zone() {
 
     [ -f "$zonefile" ] || return 0  # Not yet generated — skip
 
-    if named-checkzone "$zone" "$zonefile" > /dev/null 2>&1; then
+    checkzone_output=$(named-checkzone "$zone" "$zonefile" 2>&1)
+    checkzone_status=$?
+    if [ "$checkzone_status" -eq 0 ]; then
         return 0  # Zone is valid — nothing to do
     fi
 
-    echo "WARN: Generated zone file for $zone failed validation"
+    echo "WARN: Generated zone file for $zone failed validation:"
+    echo "$checkzone_output"
     if [ -f "$backupfile" ]; then
         echo "INFO: Restoring $zone from last-known-good backup"
         cp "$backupfile" "$zonefile"
